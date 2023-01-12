@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+var defaultAccount struct {
+	set bool
+	Account
+}
+
 type Account struct {
 	Name     string //display name of account user, ie John Smith
 	Email    string
@@ -43,4 +48,17 @@ func (a Account) Send(subject, body string, to ...string) (err error) {
 	}
 
 	return
+}
+
+// SetAsDefault sets a default account so the Send function can be used without specifying an account
+func (a Account) SetAsDefault() {
+	defaultAccount.Account = a
+	defaultAccount.set = true
+}
+
+func Send(subject, body string, to ...string) (err error) {
+	if !defaultAccount.set {
+		return errors.New("no account set. use the SendFromAccount function to specify a global default or use account.Send")
+	}
+	return defaultAccount.Send(subject, body, to...)
 }
