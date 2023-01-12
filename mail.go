@@ -9,7 +9,7 @@ import (
 )
 
 type Account struct {
-	Name     string //full name of account user
+	Name     string //display name of account user, ie John Smith
 	Email    string
 	Password string
 	Host     string //ie smtp.gmail.com
@@ -24,12 +24,13 @@ func NewGmail(name, email, password string) (a Account) {
 	}
 }
 
+// Send formats the headers and sends the email
 func (a Account) Send(subject, body string, to ...string) (err error) {
 	if len(to) == 0 {
 		return errors.New("recipients cannot be blank")
 	}
 
-	msg := "From: " + a.Name + "\r\n" +
+	msg := "From: " + a.Name + " <" + a.Email + ">" + "\r\n" +
 		"To: " + strings.Join(to, ",") + "\r\n" +
 		"Subject: " + subject + "\r\n" +
 		"Content-Type: text/html\r\n\r\n" + body
