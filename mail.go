@@ -56,6 +56,8 @@ func (a Account) SetAsDefault() {
 	defaultAccount.set = true
 }
 
+// Send email using default account. Note an account must have previously been set as default
+// Alternatively, use account.Send to specify account to use
 func Send(subject, body string, to ...string) (err error) {
 	if !defaultAccount.set {
 		return errors.New("no account set. use the SendFromAccount function to specify a global default or use account.Send")
