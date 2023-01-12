@@ -34,8 +34,9 @@ func (a Account) Send(subject, body string, to ...string) (err error) {
 		"Subject: " + subject + "\r\n" +
 		"Content-Type: text/html\r\n\r\n" + body
 
-	auth := smtp.PlainAuth("", a.Email, a.Password, a.Host)
-	err = smtp.SendMail(net.JoinHostPort(a.Host, strconv.Itoa(a.Port)), auth, a.Email, to, []byte(msg))
+	err = smtp.SendMail(net.JoinHostPort(a.Host, strconv.Itoa(a.Port)),
+		smtp.PlainAuth("", a.Email, a.Password, a.Host),
+		a.Email, to, []byte(msg))
 	if err != nil {
 		return
 	}
